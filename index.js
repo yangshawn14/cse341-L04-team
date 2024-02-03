@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerConfig = require('./swagger-config');
 const app = express();
 
 app
@@ -7,6 +9,9 @@ app
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .use('/', require('./routes'));
+
+// Serve Swagger UI at /api-docs endpoint
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig.doc));
 
 const db = require('./models');
 db.mongoose

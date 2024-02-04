@@ -1,17 +1,20 @@
 const express = require('express');
 const cors = require('cors');
-const swaggerUi = require('swagger-ui-express');
-const swaggerConfig = require('./swagger-config');
 const app = express();
 
+const swaggerUi = require('swagger-ui-express');
+// const swaggerConfig = require('./swagger-config');
+// const { doc } = require('./swagger-config');
+const swaggerDocument = require('./swagger.json');
+
 app
+  // Serve Swagger UI at /api-docs endpoint
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use(cors())
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
   .use('/', require('./routes'));
 
-// Serve Swagger UI at /api-docs endpoint
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerConfig.doc));
 
 const db = require('./models');
 db.mongoose
